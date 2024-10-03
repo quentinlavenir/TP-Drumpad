@@ -1,3 +1,7 @@
+let recording = false;
+let sequence = [];
+
+
 function playSound (evenement){
     let keyCode=evenement.keyCode;
     let selector=`audio[data-key="${keyCode}"]`;
@@ -9,7 +13,10 @@ function playSound (evenement){
 }
 // sélection avec data attribut la balise audio
 
-document.addEventListener("keydown", playSound);
+document.addEventListener("keydown", (event) => {
+    playSound(event);
+    if (recording) addKey(event)
+});
 // qu'est-ce qu'on écoute et qu'est-ce qu'on fait fonction anonyme
 
 // Animer css pad enfoncé avec key
@@ -38,13 +45,15 @@ for (let pad of pads)
     pad.addEventListener ("transitionend", removeTransition)
 }
 
+// surveiller simulation des touches
 function simulateKey(key){
     let newEvent = new KeyboardEvent("keydown",{keyCode:key});
     document.dispatchEvent(newEvent);
 }
 
+// surveiller simulation click
 let myButton = document.querySelector(".myButton");
-myButton.addEventListener("click", () => simulateKey(65));
+myButton.addEventListener("click", () => beatBox());
 
 
 function playBeat (key, delay){
@@ -62,8 +71,21 @@ function playBeat (key, delay){
 // Function beatBox = function simulateKey() simule la pression d'une touche de clavier une 
 //                    function playBeat() renvoie une nouvelle promesse
 
-function beatBox (){
-    playBeat(65, 200)
-        .then(()=>playBeat(90, 200))
-        .then(()=>playBeat(69, 200))
+async function beatBox (){
+    for (let key of sequence){
+        await playBeat(key, 200)
+    }
+}
+
+// Créer bouton pour démarrer et arrêter enregistrement (quand on appuie sur les touches du clavier)
+
+// 1 Créer 1 bouton listen record avec condition
+let myButtonRecord = document.querySelector('.myButtonRecord');
+myButtonRecord.addEventListener("click", () => {
+    if (recording) recording = false;
+    else recording = true;
+})
+
+function addKey (event){
+    sequence.push(event.keyCode);
 }

@@ -73,3 +73,7 @@ h1 {
 .myButton {
   background-color: green;
 }
+
+.myButtonRecord {
+  background-color: yellow;
+}
