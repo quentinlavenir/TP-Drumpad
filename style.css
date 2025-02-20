@@ -72,8 +72,14 @@ h1 {
 
 .myButton {
   background-color: green;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .myButtonRecord {
   background-color: yellow;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
